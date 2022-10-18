@@ -1,12 +1,8 @@
 /********************************************************************************
-* main.c: Interruptbaserad styrning av två lysdioder anslutna till pin 8 - 9
-*         via nedtryckning av tryckknappar anslutna till pin 12 - 13.
-*
-*         PCI-avbrott PCINT4 - PCINT5 är aktiverade för att toggla lysdioderna 
-*         mellan att vara tända eller släckta. Vid nedtryckning av tryckknappen
-*         ansluten till pin 12 så togglas lysdioden ansluten till pin 8. 
-*         På samma sätt gäller att vid nedtryckning av tryckknappen ansluten  
-*         till pin 13 så togglas lysdioden ansluten till pin 9.
+* main.c: Interruptbaserad styrning av en lysdiod ansluten till pin 8 / PORTB0
+*         via nedtryckning av en tryckknapp ansluten till pin 13 / PORTB5.
+*         PCI-avbrott PCINT5 är aktiverat på tryckknappens pin för att toggla
+*         lysdioden mellan att vara tänd och släckt.
 ********************************************************************************/
 #include "header.h"
 
@@ -14,14 +10,14 @@
 * led_toggle: Togglar tillståndet för angiven lysdiod på I/O-port B mellan att
 *             vara tänd och släckt. Statiska variabler används för att hålla
 *             reda på lysdiodernas tillstånd och togglas vid anrop för att
-*             ändra tillstånd.
+*             ändra tillstånd. För tillfället har implementering bara genomförts
+*             för lysdiod 1 ansluten till pin 8 / PORTB0.
 *
-*             - pin: Lysdiodens pin-nummber på I/O-port B.
+*             - pin: Lysdiodens pin-nummer på I/O-port B.
 ********************************************************************************/
 void led_toggle(const uint8_t pin)
 {
    static bool led1_enabled = false;
-   static bool led2_enabled = false;
 
    if (pin == LED1)
    {
@@ -29,13 +25,6 @@ void led_toggle(const uint8_t pin)
 
       if (led1_enabled) LED1_ON;
       else LED1_OFF;
-   }
-   else if (pin == LED2)
-   {
-      led2_enabled = !led2_enabled;
-
-      if (led2_enabled) LED2_ON;
-      else LED2_OFF;
    }
 
    return;
